@@ -38,7 +38,7 @@ export default {
             time: '',
         }
     },
-    component: {
+    components: {
         WeatherNow: {
             type: Object,
             required: true,
@@ -65,7 +65,6 @@ export default {
     mounted() {
         this.updateTime()
         setInterval(this.updateTime, 60000)
-
     }
 }
 </script>

@@ -1,32 +1,36 @@
 <template>
     <div class="ml-2.5">
         <!-- havo turi -->
-        <p v-html="weatherType('quyoshli')" class="text-white text-8xl"></p>
+        <p v-html="getWeatherIcon(weatherType)" class="text-white text-8xl"></p>
     </div>
 </template>
 
 <script>
 export default {
+    props: {
+        weatherType: {
+            type: String,
+            required: true,
+        }
+    },
     data() {
         return {
 
         }
     },
     methods: {
-        weatherType(textType) {
+        getWeatherIcon(textType) {
             switch (textType) {
-                case "quyoshli":
+                case "Clear":
                     return "<i class='bx bx-sun'></i>"
-                case "bulutli":
+                case "Clouds":
                     return "<i class='bx bx-cloud'></i>"
-                case "yomg'irli":
+                case "Drizzle":
                     return "<i class='bx bx-cloud-rain'></i>"
-                case "qorli":
+                case "Rain":
                     return "<i class='bx bx-cloud-snow'></i>"
-                case "shamolli":
+                case "Mist":
                     return "<i class='bx bx-wind'></i>"
-                default:
-                    return "<i class='bx bxs-sun'></i>"
             }
         }
     },

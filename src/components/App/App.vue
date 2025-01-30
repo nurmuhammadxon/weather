@@ -1,11 +1,11 @@
 <template>
-    <div class="app">
+    <div class="app" :class="weatherClass">
         <!-- left content -->
         <div class="left-content">
             <!-- Logo -->
             <div class="logo">
-                <a href="./App.vue">
-                    <svg width="90" height="50" viewBox="0 0 90 47" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <a href="./App.vue" class="flex font-bold text-4xl">
+                    <!-- <svg width="90" height="50" viewBox="0 0 90 47" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path fill-rule="evenodd" clip-rule="evenodd"
                             d="M71.834 1.67818L78.1206 3.36365L73.2061 19.8301L82.4689 16.8415L77.6172 31.1032L72.7656 45.3649L66.5523 43.4497L69.3758 35.1498L72.1993 26.85L63.4818 29.6626L71.834 1.67818Z"
                             fill="url(#paint0_linear_129_5353)" />
@@ -22,11 +22,15 @@
                                 <stop offset="1" stop-color="#F5DA79" />
                             </linearGradient>
                         </defs>
-                    </svg>
+                    </svg> -->
+                    <span class="text-blue-400">
+                        Muhid
+                    </span>
+                    <span class="text-red-400">dinov</span>
                 </a>
             </div>
             <WeatherCard :temperature="weatherData.temp" :city="weatherData.city" />
-            <WeatherDetails />
+            <WeatherDetails :weatherType="weatherData.weatherType" />
         </div>
         <!-- Right content -->
         <div class="rigth-content">
@@ -55,6 +59,7 @@ export default {
                 cloud: 0,
                 wind: 0,
                 namlik: 0,
+                weatherType: 'Clear'
             },
         }
     },
@@ -64,23 +69,30 @@ export default {
         SearchBar,
         Forecast,
     },
+    computed: {
+        weatherClass() {
+            let month = new Date().getMonth() + 1
+            if ([12, 1, 2].includes(month)) return 'bg-winter'
+            if ([3, 4, 5].includes(month)) return 'bg-spring'
+            if ([6, 7, 8].includes(month)) return 'bg-summer'
+            if ([9, 10, 11].includes(month)) return 'bg-autumn'
+            return ''
+        }
+    },
     methods: {
         async WeatherNow(city = "Samarkand") {
             try {
                 const response = await fetch(this.apiURL + city + '&appid=' + this.apiKey)
                 const data = await response.json()
 
-                this.weatherData.temp = data.main.temp
+                this.weatherData.temp = Math.round(data.main.temp)
                 this.weatherData.city = data.name
-                this.weatherData.maxTemp = data.main.temp_max
-                this.weatherData.minTemp = data.main.temp_min
+                this.weatherData.maxTemp = Math.round(data.main.temp_max)
+                this.weatherData.minTemp = Math.round(data.main.temp_min)
                 this.weatherData.cloud = data.clouds.all
                 this.weatherData.wind = data.wind.speed
                 this.weatherData.namlik = data.main.humidity
-
-                console.log(data)
-
-
+                this.weatherData.weatherType = data.weather[0].main
             } catch (error) {
                 alert(error.message)
             }
@@ -88,7 +100,7 @@ export default {
         updateCity(newCity) {
             this.weatherData.city = newCity
             this.WeatherNow(newCity)
-        }
+        },
     },
     mounted() {
         this.WeatherNow()
@@ -104,10 +116,6 @@ export default {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    background-image: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), url('@/images/bg-winter.jpg');
-    background-repeat: no-repeat;
-    background-position: center;
-    background-size: cover;
     position: relative;
 }
 
@@ -136,5 +144,21 @@ export default {
     padding-left: 35px;
     backdrop-filter: blur(19px);
     border-left: 2px solid #ffffff23;
+}
+
+.bg-winter {
+    background: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), url('@/images/bg-winter.jpg') no-repeat center/cover;
+}
+
+.bg-spring {
+    background: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), url('@/images/bg-spring.jpg') no-repeat center/cover;
+}
+
+.bg-summer {
+    background: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), url('@/images/bg-summer.jpg') no-repeat center/cover;
+}
+
+.bg-autumn {
+    background: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), url('@/images/bg-autumn.jpg') no-repeat center/cover;
 }
 </style>

@@ -3,7 +3,7 @@
         <div class="search-input-box">
             <input type="text" id="search-input" class="search-input" placeholder="Joyni qidirish..." v-model="city"
                 @keydown.enter="sendCity">
-            <label for="search-input">
+            <label for="search-input" @click="sendCity">
                 <i class='bx bx-search'></i>
             </label>
         </div>
@@ -49,6 +49,10 @@ export default {
     border: none;
     outline: none;
     color: rgb(255, 255, 255, 0.7);
+}
+
+.search-input-box label {
+    cursor: pointer;
 }
 
 .bx-search {
